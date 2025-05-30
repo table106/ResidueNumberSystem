@@ -1,26 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics.PerformanceData;
 
 namespace RNS
 {
     /// <summary>
     /// A Residual Number System (RNS) counter, composed of varying <c>BaseCounter</c>s.
     /// </summary>
-    public class RNSCounter
+    public class RNSCounter : IEnumerable<Counter>
     {
-        private Dictionary<int, BaseCounter> counters;
-        public Dictionary<int, BaseCounter> Counters { get { return counters; } }
+        public Dictionary<int, Counter> Counters { get; set; }
         public RNSCounter()
         {
-            counters = new Dictionary<int, BaseCounter>();
+            Counters = new Dictionary<int, Counter>();
         }
         /// <summary>
         /// Adds a single counter to the RNS counter.
         /// </summary>
         /// <param name="counter">The counter to be added.</param>
-        public void AddCounter(BaseCounter counter)
+        public void AddCounter(Counter counter)
         {
             counter.Compute();
-            counters.Add(counters.Count + 1, counter);
+            Counters.Add(Counters.Count + 1, counter);
         }
         /// <summary>
         /// Removes a chosen counter from the RNS counter.
@@ -28,32 +29,29 @@ namespace RNS
         /// <param name="id">ID of the counter to remove (starts at 1).</param>
         public void RemoveCounter(int id)
         {
-            if (!counters.ContainsKey(id)) { throw new KeyNotFoundException("Specified ID is not in counter dictionary"); }
-            counters.Remove(id);
-            Dictionary<int, BaseCounter> newdict = new Dictionary<int, BaseCounter>();
-            foreach (KeyValuePair<int, BaseCounter> counter in counters)
+            if (!Counters.ContainsKey(id)) { throw new KeyNotFoundException("Specified ID is not in counter dictionary"); }
+            Counters.Remove(id);
+            Dictionary<int, Counter> newdict = new Dictionary<int, Counter>();
+            foreach (KeyValuePair<int, Counter> counter in Counters)
             {
-                if (counter.Key < id) { newdict.Add(counter.Key, counter.Value); }
-                else { newdict.Add(counter.Key - 1, counter.Value); }
+                if (counter.Key < id) newdict.Add(counter.Key, counter.Value);
+                else newdict.Add(counter.Key - 1, counter.Value);
             }
-            counters = newdict;
+            Counters = newdict;
         }
         /// <summary>
-        /// Calls <c>BaseCounter.Click()</c> on all <c>BaseCounter</c>s in the <c>RNSCounter</c>.
+        /// Calls <c>Counter.Click()</c> on all <c>Counter</c>s in the <c>RNSCounter</c>.
         /// </summary>
         public void Click(int n = 1)
         {
-            foreach (BaseCounter counter in counters.Values)
-            {
-                counter.Click(n);
-            }
+            foreach (Counter counter in Counters.Values) counter.Click(n);
         }
 
         public override string ToString()
         {
             string segments = "ID\t|\tvalue\n";
             string displayed = "";
-            foreach (KeyValuePair<int, BaseCounter> counter in counters)
+            foreach (KeyValuePair<int, Counter> counter in Counters)
             {
                 segments += counter.Key.ToString() + "\t|\t" + counter.Value.Count.ToString() + "\n";
                 displayed += counter.Value.Count.ToString();
@@ -61,17 +59,17 @@ namespace RNS
             return segments + "display: " + displayed + "\n";
         }
 
-        public BaseCounter this[int n]
+        public Counter this[int n]
         {
-            get { return counters[n]; }
-            set { counters[n] = value; }
+            get { return Counters[n]; }
+            set { Counters[n] = value; }
         }
 
         public override bool Equals(object obj)
         {
             if (!(obj is RNSCounter other) || other.Counters.Count != Counters.Count) return false;
 
-            foreach (var pair in counters)
+            foreach (var pair in Counters)
             {
                 if (pair.Value.Count != other.Counters[pair.Key].Count) { return false; }
             }
@@ -81,6 +79,16 @@ namespace RNS
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public IEnumerator<Counter> GetEnumerator()
+        {
+            return Counters.Values.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

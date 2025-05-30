@@ -3,16 +3,21 @@
     /// <summary>
     /// A singular counter.
     /// </summary>
-    public class BaseCounter
+    public class Counter
     {
-        private readonly int counterBase;
-        public int Base { get { return counterBase; } }
-        private int count;
-        public int Count { get { return count; } }
-        public BaseCounter(int counterBase, int value = 0)
+        public int Base { get; }
+        private int _count;
+        public int Count { get { return _count; }
+            set
+            {
+                _count = value;
+                Compute();
+            }
+        }
+        public Counter(int counterBase, int value = 0)
         {
-            this.counterBase = counterBase;
-            count = value;
+            Base = counterBase;
+            _count = value;
             Compute();
         }
         /// <summary>
@@ -20,13 +25,13 @@
         /// </summary>
         public void Compute()
         {
-            while (count >= counterBase)
+            while (_count >= Base)
             {
-                count -= counterBase;
+                _count -= Base;
             }
-            while (count < 0)
+            while (_count < 0)
             {
-                count += counterBase;
+                _count += Base;
             }
         }
         /// <summary>
@@ -34,7 +39,7 @@
         /// </summary>
         public void Click(int n = 1)
         {
-            count += n;
+            _count += n;
             Compute();
         }
         /// <summary>
@@ -44,13 +49,13 @@
         /// <returns>The current value of the counter.</returns>
         public void Set(int dest)
         {
-            count = dest;
+            _count = dest;
             Compute();
         }
 
         public override string ToString()
         {
-            return count.ToString();
+            return _count.ToString();
         }
     }
 }
