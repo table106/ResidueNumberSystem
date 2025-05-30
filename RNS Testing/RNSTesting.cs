@@ -97,7 +97,7 @@ namespace RNS_Testing
         }
 
         [TestMethod]
-        public void RemoveTest()
+        public void RemovalTest()
         {
             // arrange
             RNSCounter result = new RNSCounter();
