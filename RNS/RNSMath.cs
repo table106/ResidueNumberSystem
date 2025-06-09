@@ -19,8 +19,8 @@ namespace RNS
             if (counter1.Counters.Count != counter2.Counters.Count) { throw new RNSCounterAmountDifferenceException("RNSCounter Counter amount cannot differ"); }
             foreach (var counter in counter1.Counters.Zip(counter2.Counters, (one, two) => new { digit1 = one, digit2 = two }))
             {
-                if (counter.digit1.Value.Base != counter.digit2.Value.Base) { throw new CounterBaseMismatchException("RNSCounter's Counter bases must be identical to use RNSMath methods"); }
-                res.AddCounter(new Counter(counter.digit1.Value.Base, counter.digit1.Value.Count + counter.digit2.Value.Count));
+                if (counter.digit1.Base != counter.digit2.Base) { throw new CounterBaseMismatchException("RNSCounter's Counter bases must be identical to use RNSMath methods"); }
+                res.AddCounter(new Counter(counter.digit1.Base, counter.digit1.GetCount() + counter.digit2.GetCount()));
             }
             return res;
         }
@@ -39,8 +39,8 @@ namespace RNS
             if (counter1.Counters.Count != counter2.Counters.Count) { throw new RNSCounterAmountDifferenceException("RNSCounter Counter amount cannot differ"); }
             foreach (var counter in counter1.Counters.Zip(counter2.Counters, (one, two) => new { digit1 = one, digit2 = two }))
             {
-                if (counter.digit1.Value.Base != counter.digit2.Value.Base) { throw new CounterBaseMismatchException("RNSCounter's Counter bases must be identical to use RNSMath methods"); }
-                res.AddCounter(new Counter(counter.digit1.Value.Base, counter.digit1.Value.Count - counter.digit2.Value.Count));
+                if (counter.digit1.Base != counter.digit2.Base) { throw new CounterBaseMismatchException("RNSCounter's Counter bases must be identical to use RNSMath methods"); }
+                res.AddCounter(new Counter(counter.digit1.Base, counter.digit1.GetCount() - counter.digit2.GetCount()));
             }
             return res;
         }
@@ -59,8 +59,8 @@ namespace RNS
             if (counter1.Counters.Count != counter2.Counters.Count) { throw new RNSCounterAmountDifferenceException("RNSCounter Counter amount cannot differ"); }
             foreach (var counter in counter1.Counters.Zip(counter2.Counters, (one, two) => new { digit1 = one, digit2 = two }))
             {
-                if (counter.digit1.Value.Base != counter.digit2.Value.Base) { throw new CounterBaseMismatchException("RNSCounter's Counter bases must be identical to use RNSMath methods"); }
-                res.AddCounter(new Counter(counter.digit1.Value.Base, counter.digit1.Value.Count * counter.digit2.Value.Count));
+                if (counter.digit1.Base != counter.digit2.Base) { throw new CounterBaseMismatchException("RNSCounter's Counter bases must be identical to use RNSMath methods"); }
+                res.AddCounter(new Counter(counter.digit1.Base, counter.digit1.GetCount() * counter.digit2.GetCount()));
             }
             return res;
         }

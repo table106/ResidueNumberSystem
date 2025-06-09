@@ -6,56 +6,60 @@
     public class Counter
     {
         public int Base { get; }
-        private int _count;
-        public int Count { get { return _count; }
-            set
-            {
-                _count = value;
-                Compute();
-            }
-        }
+        private int Count;
         public Counter(int counterBase, int value = 0)
         {
             Base = counterBase;
-            _count = value;
+            Count = value;
             Compute();
         }
+
         /// <summary>
         /// Computes the <c>count</c> value.
         /// </summary>
         public void Compute()
         {
-            while (_count >= Base)
+            while (Count >= Base)
             {
-                _count -= Base;
+                Count -= Base;
             }
-            while (_count < 0)
+            while (Count < 0)
             {
-                _count += Base;
+                Count += Base;
             }
         }
+
         /// <summary>
         /// Increments and computes the counter's value.
         /// </summary>
         public void Click(int n = 1)
         {
-            _count += n;
+            Count += n;
             Compute();
         }
+
         /// <summary>
         /// Sets the counter to a specified value.
         /// </summary>
         /// <param name="dest">Value to set the counter to.</param>
-        /// <returns>The current value of the counter.</returns>
+        /// <returns>The current value of the counter</returns>
         public void Set(int dest)
         {
-            _count = dest;
-            Compute();
+            Count = dest;
+        }
+
+        /// <summary>
+        /// Getter function for the <c>Count</c> property.
+        /// </summary>
+        /// <returns><c>Count</c> of the <c>Counter</c></returns>
+        public int GetCount()
+        {
+            return Count;
         }
 
         public override string ToString()
         {
-            return _count.ToString();
+            return Count.ToString();
         }
     }
 }
